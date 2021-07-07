@@ -1,0 +1,102 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TestCreator.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TestCreator.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="TestCreator">
+  <Window.DataContext>
+    <vm:MainWindowViewModel/>
+  </Window.DataContext>
+  <Window.Styles>
+    <Style Selector="Button.Top">
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="VerticalAlignment" Value="Stretch"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="Width" Value="90"/>
+    </Style>
+  </Window.Styles>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="90"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid Background="#EEE">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+        <Button Content="Сохранить" Classes="Top"/>
+        <Button Content="Открыть" Classes="Top"/>
+        <Panel Width="90"/>
+        <Button Content="Новое задание с переменными" Classes="Top" Width="220"/>
+        <Button Content="Новое задание с вариантами" Classes="Top" Width="220"/>
+        <Panel Width="90"/>
+        <Button Content="Удалть" Classes="Top" IsEnabled="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}, ElementName=TasksList}"/>
+        <Button Content="Изменить" Classes="Top" IsEnabled="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}, ElementName=TasksList}"/>
+      </StackPanel>
+    </Grid>
+    <Grid Grid.Row="1">
+      <ListBox HorizontalAlignment="Stretch" x:Name="TasksList" Items="{Binding Items}">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.DataTemplates>
+          <DataTemplate DataType="{x:Type vm:VarTaskViewModel}">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="420">
+              <StackPanel VerticalAlignment="Stretch" Margin="2" HorizontalAlignment="Stretch">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBox Text="{Binding TaskText}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
+                <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding Vars}" Background="Transparent">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}" FontSize="25"/>
+                        <TextBox Text="{Binding Value}" Grid.Column="1"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+          <DataTemplate DataType="{x:Type vm:SelectTaskViewModel}">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="420">
+              <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBox Text="{Binding Question}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
+                <TextBlock Text="верный ответ"/>
+                <TextBox Text="{Binding TrueAnswer}" HorizontalAlignment="Stretch"/>
+                <TextBlock Text="неверные ответы"/>
+                <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding WrongAnswers}" Background="Transparent">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding}"/>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ListBox.DataTemplates>
+      </ListBox>
+    </Grid>
+  </Grid>
+
+</Window>
