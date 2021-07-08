@@ -9,6 +9,7 @@ namespace TestCreator.Views
         public MainWindow()
         {
             InitializeComponent();
+            Services.Singleton.MainWindow = this;
 #if DEBUG
             this.AttachDevTools();
 #endif

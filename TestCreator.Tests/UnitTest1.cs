@@ -10,7 +10,7 @@ namespace TestCreator.Tests
         public void FindNoVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars(""),
+                TestCreator.Services.StringSplitter.FindVars(""),
                 new System.Collections.Generic.List<string>()
                 );
         }
@@ -18,7 +18,7 @@ namespace TestCreator.Tests
         public void FindOneShortVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {a}"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {a}"),
                 new System.Collections.Generic.List<string>() { "a" }
                 );
         }
@@ -26,7 +26,7 @@ namespace TestCreator.Tests
         public void FindOneLongVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {abc}"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {abc}"),
                 new System.Collections.Generic.List<string>() { "abc" }
                 );
         }
@@ -34,7 +34,7 @@ namespace TestCreator.Tests
         public void FindMoreLongVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {ac}{d}"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {ac}{d}"),
                 new System.Collections.Generic.List<string>() { "ac", "d" }
                 );
         }
@@ -42,7 +42,7 @@ namespace TestCreator.Tests
         public void FindMoreDublicateLongVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {ac} {d} {ac} {d}"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {ac} {d} {ac} {d}"),
                 new System.Collections.Generic.List<string>() { "ac", "d" }
                 );
         }
@@ -50,7 +50,7 @@ namespace TestCreator.Tests
         public void FindRealyMoreLongVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {Ab(C)_d}"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {Ab(C)_d}"),
                 new System.Collections.Generic.List<string>() { "Ab(C)_d" }
                 );
         }
@@ -58,7 +58,7 @@ namespace TestCreator.Tests
         public void FindDontCloseBracketVar()
         {
             CollectionAssert.AreEqual(
-                TestCreator.Sevices.StringSplitter.FindVars("text whith {A"),
+                TestCreator.Services.StringSplitter.FindVars("text whith {A"),
                 new System.Collections.Generic.List<string>() { "A" }
                 );
         }
@@ -66,12 +66,12 @@ namespace TestCreator.Tests
         [ExpectedException(typeof(Exception))]
         public void FindWrongBracketVar()
         { 
-            Sevices.StringSplitter.FindVars("text whith {a{c}");
+            Services.StringSplitter.FindVars("text whith {a{c}");
         }
         [TestMethod]
         public void TestTimeFindVar()
         {
-            Sevices.StringSplitter.FindVars("this is {so} long text whist {aa} and {bb} and more {aa} {aa} {aa} {aa}{aa}{aa}{aa}... and more {bb} {bb} {bb} {bb}{bb}{bb}{bb}{bb}{bb}... {so}");
+            Services.StringSplitter.FindVars("this is {so} long text whist {aa} and {bb} and more {aa} {aa} {aa} {aa}{aa}{aa}{aa}... and more {bb} {bb} {bb} {bb}{bb}{bb}{bb}{bb}{bb}... {so}");
             Assert.IsTrue(true);
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestCreator.Sevices
+namespace TestCreator.Services
 {
     public class StringSplitter
     {

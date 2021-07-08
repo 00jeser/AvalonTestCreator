@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TestCreator.ViewModels
 {
@@ -18,7 +19,8 @@ namespace TestCreator.ViewModels
         }
 
 
-        public ObservableCollection<Question> Questions { get; set; }
+        [JsonProperty("q")]
+        public ObservableCollection<Question> Questions { get; set; } = new ObservableCollection<Question>();
         public ReactiveCommand<Unit, Unit> DoAdd { get; }
         public ReactiveCommand<Unit, Unit> DoRemove { get; }
 

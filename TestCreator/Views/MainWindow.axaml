@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TestCreator.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="TestCreator">
+        Title="TestCreator" MinWidth="875">
   <Window.DataContext>
     <vm:MainWindowViewModel/>
   </Window.DataContext>
@@ -14,37 +14,76 @@
     <Style Selector="Button.Top">
       <Setter Property="VerticalContentAlignment" Value="Center"/>
       <Setter Property="VerticalAlignment" Value="Stretch"/>
-      <Setter Property="HorizontalContentAlignment" Value="Center"/>
-      <Setter Property="Width" Value="90"/>
+      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+      <Setter Property="Width" Value="95"/>
     </Style>
   </Window.Styles>
+  <!--Shell-->
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="90"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
+    <!-- Верхняя панель -->
     <Grid Background="#EEE">
-      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-        <Button Content="Сохранить" Classes="Top"/>
-        <Button Content="Открыть" Classes="Top"/>
-        <Panel Width="90"/>
-        <Button Content="Новое задание с переменными" Classes="Top" Width="220"/>
-        <Button Content="Новое задание с вариантами" Classes="Top" Width="220"/>
-        <Panel Width="90"/>
-        <Button Content="Удалть" Classes="Top" IsEnabled="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}, ElementName=TasksList}"/>
-        <Button Content="Изменить" Classes="Top" IsEnabled="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}, ElementName=TasksList}"/>
+      <StackPanel HorizontalAlignment="Left" VerticalAlignment="Stretch" Orientation="Horizontal">
+        <Button Classes="Top" Command="{Binding DoSave}">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/save.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Сохранить" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
+        <Button Classes="Top" Command="{Binding DoOpen}">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/Open.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Открыть" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
       </StackPanel>
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Horizontal">
+        <Button Classes="Top" Width="120" Command="{Binding DoAdd}" CommandParameter="Var">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/AddVar.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Новая задача с переменными" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
+        <Button Classes="Top" Width="120" Command="{Binding DoAdd}" CommandParameter="Select">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/Add.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Новая задача с вариантами" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
+        <Button Classes="Top" Width="120" Command="{Binding DoAdd}" CommandParameter="Few">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/Add.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Новая задача с типами" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
+        <Button Classes="Top" IsEnabled="{Binding SelectedItem, ElementName=TasksList, Converter={x:Static ObjectConverters.IsNotNull}}" Command="{Binding DoDelete}">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/del.png"/>
+            <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Удалить" TextWrapping="Wrap" FontSize="13"/>
+          </StackPanel>
+        </Button>
+      </StackPanel>
+      <Button Classes="Top" HorizontalAlignment="Right">
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/Export.png"/>
+          <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Экспорт" TextWrapping="Wrap" FontSize="13"/>
+        </StackPanel>
+      </Button>
     </Grid>
+    <!-- Панель Задач -->
     <Grid Grid.Row="1">
-      <ListBox HorizontalAlignment="Stretch" x:Name="TasksList" Items="{Binding Items}">
+      <ListBox SelectedItem="{Binding Selected}" HorizontalAlignment="Stretch" x:Name="TasksList" Items="{Binding Items}">
         <ListBox.ItemsPanel>
           <ItemsPanelTemplate>
-            <WrapPanel />
+            <WrapPanel HorizontalAlignment="Center"/>
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.DataTemplates>
           <DataTemplate DataType="{x:Type vm:VarTaskViewModel}">
-            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="420">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="410">
               <StackPanel VerticalAlignment="Stretch" Margin="2" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Name}"/>
                 <TextBox Text="{Binding TaskText}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
@@ -71,7 +110,7 @@
             </Border>
           </DataTemplate>
           <DataTemplate DataType="{x:Type vm:SelectTaskViewModel}">
-            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="420">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="410">
               <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock Text="{Binding Name}"/>
                 <TextBox Text="{Binding Question}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
@@ -89,7 +128,7 @@
                 <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding WrongAnswers}" Background="Transparent">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                      <TextBox Text="{Binding}"/>
+                      <TextBox Text="{Binding value}"/>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                   <ItemsControl.ItemsPanel>
@@ -102,7 +141,7 @@
             </Border>
           </DataTemplate>
           <DataTemplate DataType="{x:Type vm:FewTaskViewModel}">
-            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="865">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="850">
               <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock Text="{Binding Name}"/>
                 <Grid>
@@ -110,8 +149,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
-                <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
-                <Button Grid.Column="1" Command="{Binding DoRemove}" Content="-" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                  <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                  <Button Grid.Column="1" Command="{Binding DoRemove}" Content="-" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                 </Grid>
                 <ItemsControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Items="{Binding Questions}" Background="Transparent">
                   <ItemsControl.ItemTemplate>

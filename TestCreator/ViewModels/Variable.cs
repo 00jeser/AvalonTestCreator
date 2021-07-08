@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,9 @@ namespace TestCreator.ViewModels
 {
     public class Variable : ViewModelBase
     {
+        [JsonProperty("Name")]
         public string Name { get; set; }
-        public string Value { get; 
-            set; }
+        [JsonProperty("Value")]
+        public string Value { get; set; }
     }
 }

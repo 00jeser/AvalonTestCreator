@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestCreator.Sevices;
+using TestCreator.Services;
 
 namespace TestCreator.ViewModels
 {
     public class VarTaskViewModel : TaskBaseViewModel
     {
+        [JsonProperty("TaskText")]
         private string text = "";
-        public ObservableCollection<Variable> Vars { get; set; } = new ObservableCollection<Variable>();
         public string TaskText 
         {
             get => text;
@@ -43,6 +44,8 @@ namespace TestCreator.ViewModels
                 }
             }
         }
+        [JsonProperty("Vars")]
+        public ObservableCollection<Variable> Vars { get; set; } = new ObservableCollection<Variable>();
 
     }
 }

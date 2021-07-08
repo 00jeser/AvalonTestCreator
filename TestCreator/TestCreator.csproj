@@ -8,11 +8,29 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\Add.png" />
+    <None Remove="Assets\AddVar.png" />
+    <None Remove="Assets\close.png" />
+    <None Remove="Assets\del.png" />
+    <None Remove="Assets\edit.png" />
+    <None Remove="Assets\Export.png" />
+    <None Remove="Assets\fon.png" />
+    <None Remove="Assets\ListType.png" />
+    <None Remove="Assets\logo.png" />
+    <None Remove="Assets\max.png" />
+    <None Remove="Assets\min.png" />
+    <None Remove="Assets\newF.png" />
+    <None Remove="Assets\Open.png" />
+    <None Remove="Assets\save.png" />
+    <None Remove="Assets\VarType.png" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.3" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
     <PackageReference Include="jp2masa.Avalonia.Flexbox" Version="0.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
