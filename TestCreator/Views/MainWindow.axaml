@@ -78,11 +78,45 @@
                 <TextBlock Text="верный ответ"/>
                 <TextBox Text="{Binding TrueAnswer}" HorizontalAlignment="Stretch"/>
                 <TextBlock Text="неверные ответы"/>
-                <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                  <Button Grid.Column="1" Command="{Binding DoRemove}" Content="-" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                </Grid>
                 <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding WrongAnswers}" Background="Transparent">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBox Text="{Binding}"/>
+                      <TextBox Text="{Binding}"/>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+          <DataTemplate DataType="{x:Type vm:FewTaskViewModel}">
+            <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="865">
+              <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock Text="{Binding Name}"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                <Button Command="{Binding DoAdd}" Content="+" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                <Button Grid.Column="1" Command="{Binding DoRemove}" Content="-" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                </Grid>
+                <ItemsControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Items="{Binding Questions}" Background="Transparent">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <TextBox Text="{Binding Text}" AcceptsReturn="True" Height="80"/>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                   <ItemsControl.ItemsPanel>

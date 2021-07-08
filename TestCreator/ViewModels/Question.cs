@@ -8,11 +8,6 @@ namespace TestCreator.ViewModels
 {
     public class Question : ViewModelBase
     {
-        public string QuestionText { get; set; }
-        public string Answer
-        {
-            get;
-            set;
-        }
+        public string Text { get; set; } = "";
     }
 }

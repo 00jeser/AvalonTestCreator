@@ -9,29 +9,27 @@ using System.Threading.Tasks;
 
 namespace TestCreator.ViewModels
 {
-    public class SelectTaskViewModel : TaskBaseViewModel
+    public class FewTaskViewModel : TaskBaseViewModel
     {
-        public SelectTaskViewModel() 
+        public FewTaskViewModel()
         {
             DoAdd = ReactiveCommand.Create(RunAdd);
             DoRemove = ReactiveCommand.Create(RunRemove);
         }
 
 
-        public string Question { get; set; }
-        public ObservableCollection<string> WrongAnswers { get; set; }
-        public string TrueAnswer { get; set; }
+        public ObservableCollection<Question> Questions { get; set; }
         public ReactiveCommand<Unit, Unit> DoAdd { get; }
         public ReactiveCommand<Unit, Unit> DoRemove { get; }
 
         void RunAdd()
         {
-            WrongAnswers.Add("");
+            Questions.Add(new Question());
         }
         private void RunRemove()
         {
-            if (WrongAnswers.Count >= 1)
-                WrongAnswers.RemoveAt(WrongAnswers.Count - 1);
+            if (Questions.Count >= 1)
+                Questions.RemoveAt(Questions.Count - 1);
         }
     }
 }
