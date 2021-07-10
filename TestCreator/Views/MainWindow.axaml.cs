@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using TestCreator.ViewModels;
 
 namespace TestCreator.Views
 {
@@ -19,5 +20,16 @@ namespace TestCreator.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
+
+        private void ClickDelete(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            (DataContext as MainWindowViewModel).DoDelete.Execute();
+        }
+        private void ClickDublicate(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            (DataContext as MainWindowViewModel).Items.Add((DataContext as MainWindowViewModel).Selected.Clone());
+            (DataContext as MainWindowViewModel).Rename();
+        }
+
     }
 }

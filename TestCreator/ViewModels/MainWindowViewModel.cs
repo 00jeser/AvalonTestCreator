@@ -7,88 +7,49 @@ using System.Text;
 using Newtonsoft.Json;
 using Avalonia.Controls;
 using System.IO;
+using TestCreator.Services;
 
 namespace TestCreator.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<TaskBaseViewModel> Items { get; set; }
-        public TaskBaseViewModel Selected 
-        { get;
-            set; }
-        public MainWindowViewModel() 
+        public int NumberOfVariant { get; set; } = 5;
+        private bool _showExport;
+        public bool ShowExport
         {
-            /*Items = new ObservableCollection<TaskBaseViewModel>()
-            {
-                new VarTaskViewModel()
-                {
-                    Name="1",
-                    TaskText = "Task{a}"
-                },
-                new VarTaskViewModel()
-                {
-                    Name="2",
-                    TaskText = "Task{a}"
-                },
-                new VarTaskViewModel()
-                {
-                    Name="3",
-                    TaskText = "Task{a}"
-                },
-                new SelectTaskViewModel()
-                {
-                    Name = "4",
-                    Question = "1, 2, 3, 4, или 5",
-                    TrueAnswer = "1",
-                    WrongAnswers = new ObservableCollection<string>(){ "2", "3", "4", "5" }
-                },
-                new FewTaskViewModel()
-                {
-                    Name = "5",
-                    Questions = new ObservableCollection<Question>()
-                    {
-                        new Question() {Text="Чи? Да?" }, 
-                        new Question() {Text="Чи?" },
-                        new Question() {Text="Чи? Или не чи?" }
-                    }
-                },
-                new VarTaskViewModel()
-                {
-                    Name="1",
-                    TaskText = "Task{a}"
-                },
-                new VarTaskViewModel()
-                {
-                    Name="2",
-                    TaskText = "Task{a}"
-                },
-                new VarTaskViewModel()
-                {
-                    Name="3",
-                    TaskText = "Task{a}"
-                },
-                new SelectTaskViewModel()
-                {
-                    Name = "4",
-                    Question = "1, 2, 3, 4, или 5",
-                    TrueAnswer = "1",
-                    WrongAnswers = new ObservableCollection<string>(){ "2", "3", "4", "5" }
-                },
-                new FewTaskViewModel()
-                {
-                    Name = "5",
-                    Questions = new ObservableCollection<Question>()
-                    {
-                        new Question()
-                    }
-                }
-            };*/
+            get => _showExport;
+            set => this.RaiseAndSetIfChanged(ref _showExport, value);
+        }
+        private bool _showResult;
+        public bool ShowResult
+        {
+            get => _showResult;
+            set => this.RaiseAndSetIfChanged(ref _showResult, value);
+        }
+        private string _result;
+        public string Result
+        {
+            get => _result;
+            set => this.RaiseAndSetIfChanged(ref _result, value);
+        }
+
+        public ObservableCollection<TaskBaseViewModel> Items { get; set; }
+        public TaskBaseViewModel Selected
+        {
+            get;
+            set;
+        }
+        public MainWindowViewModel()
+        {
             Items = new ObservableCollection<TaskBaseViewModel>();
 
             DoDelete = ReactiveCommand.Create(RunDelete);
             DoAdd = ReactiveCommand.Create<string>(RunAdd);
             DoSave = ReactiveCommand.Create(RunSave);
             DoOpen = ReactiveCommand.Create(RunOpen);
+            DoExport = ReactiveCommand.Create<string>(RunExport);
+            DoShow = ReactiveCommand.Create(RunShow);
+            DoClose = ReactiveCommand.Create(RunClose);
         }
 
 
@@ -109,20 +70,14 @@ namespace TestCreator.ViewModels
                     break;
 
             }
-            for(int i = 1; i <= Items.Count; i++) 
-            {
-                Items[i - 1].Name = i.ToString();
-            }
+            Rename();
         }
         public ReactiveCommand<Unit, Unit> DoDelete { get; }
         private void RunDelete()
         {
             if (Selected != null)
                 Items.Remove(Selected);
-            for (int i = 1; i <= Items.Count; i++)
-            {
-                Items[i - 1].Name = i.ToString();
-            }
+            Rename();
         }
         public ReactiveCommand<Unit, Unit> DoSave { get; }
         private async void RunSave()
@@ -141,9 +96,62 @@ namespace TestCreator.ViewModels
 
             var result = await dialog.ShowAsync(Services.Singleton.MainWindow);
             Items.Clear();
-            foreach (var t in Services.SaveService.Load(result[0])) 
+            foreach (var t in Services.SaveService.Load(result[0]))
             {
                 Items.Add(t);
+            }
+        }
+        public ReactiveCommand<string, Unit> DoExport { get; }
+        private async void RunExport(string type)
+        {
+            string e;
+            switch (type)
+            {
+                case "txt":
+                    e = RenderPipline.Render(Items, NumberOfVariant, RenderPipline.RenderType.Text);
+                    ShowResult = true;
+                    Result = e;
+                    break;
+                case "word":
+                    e = RenderPipline.Render(Items, NumberOfVariant, RenderPipline.RenderType.Word);
+                    // TODO сделать экспорт в Word через Microsoft.Office.Interpop.Word
+                    break;
+                case "md":
+                    e = RenderPipline.Render(Items, NumberOfVariant, RenderPipline.RenderType.MD);
+                    ShowResult = true;
+                    Result = e;
+                    break;
+            }
+        }
+        public ReactiveCommand<Unit, Unit> DoShow { get; }
+        private async void RunShow()
+        {
+            foreach (var i in Items)
+            {
+                if (i is VarTaskViewModel)
+                {
+                    (i as VarTaskViewModel).SetMessage();
+                    if ((i as VarTaskViewModel).WrongMessage != "")
+                        return;
+                }
+                else if (i.BaseWrongMessage != "")
+                    return;
+            }
+            ShowExport = !ShowExport;
+        }
+        public ReactiveCommand<Unit, Unit> DoClose { get; }
+        private async void RunClose()
+        {
+            ShowExport = false;
+            ShowResult = false;
+            Result = "";
+        }
+
+        public void Rename()
+        {
+            for (int i = 1; i <= Items.Count; i++)
+            {
+                Items[i - 1].Name = i.ToString();
             }
         }
     }

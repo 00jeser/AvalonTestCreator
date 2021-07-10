@@ -18,6 +18,12 @@
       <Setter Property="Width" Value="95"/>
     </Style>
   </Window.Styles>
+  <Window.Resources>
+    <ContextMenu x:Key="TaskContext">
+      <MenuItem Header="Дублировать" Click="ClickDublicate"/>
+      <MenuItem Header="Удалить" Click="ClickDelete"/>
+    </ContextMenu>
+  </Window.Resources>
   <!--Shell-->
   <Grid>
     <Grid.RowDefinitions>
@@ -66,7 +72,7 @@
           </StackPanel>
         </Button>
       </StackPanel>
-      <Button Classes="Top" HorizontalAlignment="Right">
+      <Button Classes="Top" HorizontalAlignment="Right" Command="{Binding DoShow}">
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
           <Image HorizontalAlignment="Center" Width="50" Height="50" Source="/Assets/Export.png"/>
           <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" Text="Экспорт" TextWrapping="Wrap" FontSize="13"/>
@@ -86,7 +92,7 @@
             <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="410">
               <StackPanel VerticalAlignment="Stretch" Margin="2" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Name}"/>
-                <TextBox Text="{Binding TaskText}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
+                <TextBox Watermark="Введите текст задания заключая переменные в фигурные скобки, к примеру {a} + {b}" Text="{Binding TaskText}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
                 <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding Vars}" Background="Transparent">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -106,6 +112,7 @@
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
                 </ItemsControl>
+                <TextBlock Foreground="Red" Text="{Binding WrongMessage}"/>
               </StackPanel>
             </Border>
           </DataTemplate>
@@ -113,9 +120,9 @@
             <Border BorderBrush="#AAA" Background="White" BorderThickness="4,8,4,4" Width="410">
               <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock Text="{Binding Name}"/>
-                <TextBox Text="{Binding Question}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
+                <TextBox Watermark="Текст задания" Text="{Binding Question}" AcceptsReturn="True" Height="180" HorizontalAlignment="Stretch"/>
                 <TextBlock Text="верный ответ"/>
-                <TextBox Text="{Binding TrueAnswer}" HorizontalAlignment="Stretch"/>
+                <TextBox Watermark="Верный ответ" Text="{Binding TrueAnswer}" HorizontalAlignment="Stretch"/>
                 <TextBlock Text="неверные ответы"/>
                 <Grid>
                   <Grid.ColumnDefinitions>
@@ -128,7 +135,7 @@
                 <ItemsControl Width="400" VerticalAlignment="Stretch" Items="{Binding WrongAnswers}" Background="Transparent">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                      <TextBox Text="{Binding value}"/>
+                      <TextBox Watermark="Неверный ответ" Text="{Binding value}"/>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                   <ItemsControl.ItemsPanel>
@@ -137,6 +144,7 @@
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
                 </ItemsControl>
+                <TextBlock Foreground="Red" Text="{Binding WrongMessage}"/>
               </StackPanel>
             </Border>
           </DataTemplate>
@@ -164,11 +172,44 @@
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
                 </ItemsControl>
+                <TextBlock Foreground="Red" Text="{Binding WrongMessage}"/>
               </StackPanel>
             </Border>
           </DataTemplate>
         </ListBox.DataTemplates>
       </ListBox>
+    </Grid>
+    <!--Export-->
+    <Grid Background="#AAAA" Grid.RowSpan="2" IsVisible="{Binding $parent.DataContext.ShowExport}">
+      <Grid Width="600" Background="White" VerticalAlignment="Center">
+        <StackPanel VerticalAlignment="Stretch">
+          <TextBlock Text="Количесво вариантов"/>
+          <NumericUpDown Minimum="1" Value="{Binding NumberOfVariant}"/>
+          <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+            <Button Width="200" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Command="{Binding DoExport}" CommandParameter="txt">
+              <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="Экспорт в текстовый документ"/>
+            </Button>
+            <Button Width="200" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Command="{Binding DoExport}" CommandParameter="word" IsVisible="False">
+              <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="Экспорт в MS Word"/>
+            </Button>
+            <Button Width="200" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Command="{Binding DoExport}" CommandParameter="md">
+              <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="Экспорт в MD"/>
+            </Button>
+          </StackPanel>
+          <Button Content="Отмена" Margin="0,5,0,0" HorizontalAlignment="Right" Command="{Binding DoShow}"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+    <!--Result-->
+    <Grid Background="#AAAA" Grid.RowSpan="2" IsVisible="{Binding $parent.DataContext.ShowResult}">
+      <Grid Width="600" Background="White" VerticalAlignment="Center">
+        <ScrollViewer>
+          <StackPanel>
+            <Button Content="Закрыть" Command="{Binding DoClose}"/>
+            <TextBox  AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding Result}"/>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
     </Grid>
   </Grid>
 

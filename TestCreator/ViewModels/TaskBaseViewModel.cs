@@ -11,6 +11,11 @@ namespace TestCreator.ViewModels
     {
         [JsonProperty("Name")]
         public string Name { get; set; }
+        public string BaseWrongMessage = "";
 
+        public virtual TaskBaseViewModel Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

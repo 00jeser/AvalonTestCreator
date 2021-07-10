@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TestCreator.Services
@@ -36,6 +37,22 @@ namespace TestCreator.Services
             lst.RemoveAll(s => s.Trim() == "");
 
             return lst.Distinct().ToList();
+        }
+        public static bool CheckVarValue(string value) 
+        {
+            var spaces = value.Split(';');
+            foreach(string s in spaces) 
+            {
+                if (s.Contains('/')) 
+                {
+                    var borders = s.Split('/');
+                    if(borders.Length != 2)
+                        return false;
+                    if (borders[0].All(char.IsDigit) == false || borders[1].All(char.IsDigit) == false)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

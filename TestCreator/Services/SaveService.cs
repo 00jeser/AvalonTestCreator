@@ -38,13 +38,19 @@ namespace TestCreator.Services
                 switch (o.Type)
                 {
                     case "Few":
-                        obj.Add(JsonConvert.DeserializeObject<FewTaskViewModel>(o.Content));
+                        var t1 = JsonConvert.DeserializeObject<FewTaskViewModel>(o.Content);
+                        t1.SetMessage();
+                        obj.Add(t1);
                         break;
                     case "Select":
-                        obj.Add(JsonConvert.DeserializeObject<SelectTaskViewModel>(o.Content));
+                        var t2 = JsonConvert.DeserializeObject<SelectTaskViewModel>(o.Content);
+                        t2.SetMessage();
+                        obj.Add(t2);
                         break;
                     case "Var":
-                        obj.Add(JsonConvert.DeserializeObject<VarTaskViewModel>(o.Content));
+                        var t3 = JsonConvert.DeserializeObject<VarTaskViewModel>(o.Content);
+                        t3.SetMessage();
+                        obj.Add(t3);
                         break;
                 }
             return obj;
